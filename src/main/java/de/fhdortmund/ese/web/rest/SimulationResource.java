@@ -44,25 +44,38 @@ public class SimulationResource {
     @Path("/devices")
     @Produces(MediaType.TEXT_HTML)
     public String getDevices() {
-        StringBuilder devicesHtml = new StringBuilder("<ul>");
+        StringBuilder devicesHtml = new StringBuilder("<h2>Devices</h2><ul>");
         for (var device : eventLoop.getDevices()) {
-            devicesHtml.append("<li>").append(device.getName()).append("</li>");
+            devicesHtml.append("<li>")
+                       .append(device.getName())
+                       .append(" - <a href='/logs/devices/")
+                       .append(device.getName())
+                       .append("'>View log file for device ")
+                       .append(device.getName())
+                       .append("</a></li>");
         }
         devicesHtml.append("</ul>");
         return devicesHtml.toString();
     }
-
+    
     @GET
     @Path("/sources")
     @Produces(MediaType.TEXT_HTML)
     public String getSources() {
-        StringBuilder sourcesHtml = new StringBuilder("<ul>");
+        StringBuilder sourcesHtml = new StringBuilder("<h2>Energy Sources</h2><ul>");
         for (var source : eventLoop.getEnergySources()) {
-            sourcesHtml.append("<li>").append(source.getName()).append("</li>");
+            sourcesHtml.append("<li>")
+                       .append(source.getName())
+                       .append(" - <a href='/logs/sources/")
+                       .append(source.getName())
+                       .append("'>View log file for energy source ")
+                       .append(source.getName())
+                       .append("</a></li>");
         }
         sourcesHtml.append("</ul>");
         return sourcesHtml.toString();
     }
+        
 
     @GET
     @Path("/energy")
@@ -71,4 +84,6 @@ public class SimulationResource {
         double energy = EnergyManager.getInstance().getTotalEnergyAvailable();
         return String.format("%.2f", energy);
     }
+
+    
 }

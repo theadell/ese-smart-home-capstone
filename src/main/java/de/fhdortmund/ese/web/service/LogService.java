@@ -36,4 +36,61 @@ public class LogService {
             return 0;
         }
     }
+
+        public List<String> getDeviceLogs(int page, int pageSize) {
+            return getLogsFromFile("devices.log", page, pageSize);
+        }
+    
+        public int getTotalDeviceLogsCount() {
+            return getTotalLogCount("devices.log");
+        }
+    
+        public List<String> getEnergySourceLogs(int page, int pageSize) {
+            return getLogsFromFile("energy_sources.log", page, pageSize);
+        }
+    
+        public int getTotalEnergySourceLogsCount() {
+            return getTotalLogCount("energy_sources.log");
+        }
+    
+        private List<String> getLogsFromFile(String fileName, int page, int pageSize) {
+            try (Stream<String> lines = Files.lines(Paths.get(logDirectory, fileName))) {
+                return lines.skip((page - 1) * pageSize)
+                            .limit(pageSize)
+                            .collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return List.of();
+            }
+        }
+    
+        private int getTotalLogCount(String fileName) {
+            try (Stream<String> lines = Files.lines(Paths.get(logDirectory, fileName))) {
+                return (int) lines.count();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        }
+    
+        public List<String> getDeviceLogsByName(String deviceName, int page, int pageSize) {
+            try (Stream<String> lines = Files.lines(Paths.get(logDirectory, "devices.log"))) {
+                return lines.filter(line -> line.contains(deviceName))
+                            .skip((page - 1) * pageSize)
+                            .limit(pageSize)
+                            .collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return List.of();
+            }
+        }
+    
+        public int getTotalDeviceLogsCountByName(String deviceName) {
+            try (Stream<String> lines = Files.lines(Paths.get(logDirectory, "devices.log"))) {
+                return (int) lines.filter(line -> line.contains(deviceName)).count();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        }    
 }

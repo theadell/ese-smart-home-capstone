@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Log: {deviceName}</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+</head>
+<body>
+    <h1>Logs for Device: {deviceName}</h1>
+    <div id="device-log-results">
+        <ul>
+            {#each logs}
+                <li>{it}</li>
+            {/each}
+        </ul>
+        <div>
+            {#if page > 1}
+                <a hx-get="/logs/devices/{deviceName}?page={page - 1}" hx-target="#device-log-results" hx-swap="outerHTML">Previous</a>
+            {/if}
+            {#if hasNextPage}
+                <a hx-get="/logs/devices/{deviceName}?page={page + 1}" hx-target="#device-log-results" hx-swap="outerHTML">Next</a>
+            {/if}
+        </div>
+    </div>
+</body>
+</html>

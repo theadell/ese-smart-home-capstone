@@ -3,11 +3,15 @@ package de.fhdortmund.ese.web.rest;
 import java.util.List;
 
 import de.fhdortmund.ese.web.service.LogService;
+import io.quarkus.qute.Location;
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
 import jakarta.ws.rs.Produces;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
@@ -16,6 +20,10 @@ public class LogResource {
 
     @Inject
     LogService logService;
+
+    @Inject
+    @Location("pub/devices.html") 
+    Template devices;
 
     @GET
     @Path("/search")
@@ -44,4 +52,23 @@ public class LogResource {
         
         return resultHtml.toString();
     }
+
+    @GET
+    @Path("/devices/{deviceName}")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getDeviceLogsByName(@PathParam("deviceName") String deviceName,
+                                                @QueryParam("page") @DefaultValue("1") int page) {
+        int pageSize = 10;
+        List<String> logs = logService.getDeviceLogsByName(deviceName, page, pageSize);
+        int totalResults = logService.getTotalDeviceLogsCountByName(deviceName);
+        boolean hasNextPage = page * pageSize < totalResults;
+
+        // Pass the data to the template
+        return devices
+                .data("deviceName", deviceName)
+                .data("logs", logs)
+                .data("page", page)
+                .data("hasNextPage", hasNextPage);
+    }
+
 }
