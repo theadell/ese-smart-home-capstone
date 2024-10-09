@@ -66,3 +66,38 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+#device-log-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+#device-log-results ul li {
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+#device-log-results ul li:last-child {
+    border-bottom: none;
+}
+
+/* Pagination Links */
+#device-log-results div {
+    display: flex;
+    justify-content: space-between;
+}
+
+#device-log-results a {
+    color: #007acc;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    border: 1px solid #007acc;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#device-log-results a:hover {
+    background-color: #007acc;
+    color: #fff;
+}
