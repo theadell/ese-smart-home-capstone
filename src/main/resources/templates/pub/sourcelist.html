@@ -1,0 +1,13 @@
+<div >
+    <ul class="sources__list">
+        {#each sources}
+            <li class="sources__item">
+                <strong>{it.getName()}</strong> 
+                <br>
+                Power Rating: {it.getEnergyPerTick()} kW
+                <br>
+                <a href="/logs/sources/{it.getName()}" class="sources__link">View log file for source {it.getName()}</a>
+            </li>
+        {/each}
+    </ul>
+</div>

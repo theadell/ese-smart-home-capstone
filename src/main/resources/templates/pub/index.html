@@ -8,44 +8,53 @@
 </head>
 <body>
     <div class="container">
-        <h1>Smart House Energy Simulation</h1>
-        
+        <h1 class="container__title">Smart House Energy Simulation</h1>
+
         <!-- Start/Stop Simulation Controls -->
-        <div class="control-buttons">
-            <button class="btn-start" hx-post="/simulation/start" hx-target="#status" hx-swap="outerHTML">Start Simulation</button>
-            <button class="btn-stop" hx-post="/simulation/stop" hx-target="#status" hx-swap="outerHTML">Stop Simulation</button>
-        </div>
-        
-        <!-- Status Display -->
-        <div id="status" hx-get="/simulation/status" hx-trigger="load, every 5s" hx-swap="outerHTML"></div>
+        <section class="section control">
+            <h2 class="section__title">Simulation Controls</h2>
+            <div class="control__buttons">
+                <button class="btn btn--start" hx-post="/simulation/start" hx-target="#status" hx-swap="outerHTML">Start Simulation</button>
+                <button class="btn btn--stop" hx-post="/simulation/stop" hx-target="#status" hx-swap="outerHTML">Stop Simulation</button>
+            </div>
+            <div id="status" class="status" hx-get="/simulation/status" hx-trigger="load, every 5s" hx-swap="outerHTML"></div>
+        </section>
 
         <!-- Energy Level -->
-        <h2>Energy Level</h2>
-        <div class="energy-level" hx-get="/simulation/energy" hx-trigger="load, every 2s" hx-swap="innerHTML">
-            <p>Current Energy: <span id="energy-value">Loading...</span> kWh</p>
-        </div>
+        <section class="section energy-level">
+            <h2 class="section__title">Energy Level</h2>
+            <div class="energy-level__content" hx-get="/simulation/energy" hx-trigger="load, every 2s" hx-swap="innerHTML">
+                <p class="energy-level__text">Current Energy: <span id="energy-value">Loading...</span> kWh</p>
+            </div>
+        </section>
 
         <!-- Devices Section -->
-        <h2>Devices</h2>
-        <div id="devices" hx-get="/simulation/devices" hx-trigger="load">
-            <!-- Device list will load here -->
-        </div>
+        <section class="section devices">
+            <h2 class="section__title">Devices</h2>
+            <div id="devices" hx-get="/simulation/devices" hx-trigger="load">
+                <!-- Device list will load here -->
+            </div>
+        </section>
 
         <!-- Energy Sources Section -->
-        <h2>Energy Sources</h2>
-        <div id="sources" hx-get="/simulation/sources" hx-trigger="load">
-            <!-- Source list will load here -->
-        </div>
+        <section class="section sources">
+            <h2 class="section__title">Energy Sources</h2>
+            <div id="sources"  hx-get="/simulation/sources" hx-trigger="load">
+                <!-- Source list will load here -->
+            </div>
+        </section>
 
         <!-- Log Search Section -->
-        <h2>Search Logs</h2>
-        <form hx-get="/logs/search" hx-target="#log-results">
-            <input type="text" name="query" placeholder="Enter search term" class="input-field"/>
-            <button type="submit" class="btn-search">Search</button>
-        </form>
-        <div id="log-results">
-            <!-- Log search results will load here -->
-        </div>
+        <section class="section log-search">
+            <h2 class="section__title">Search Logs</h2>
+            <form class="log-search__form" hx-get="/logs/search" hx-target="#log-results">
+                <input type="text" name="query" placeholder="Enter search term" class="log-search__input"/>
+                <button type="submit" class="btn btn--search">Search</button>
+            </form>
+            <div id="log-results" class="log-search__results">
+                <!-- Log search results will load here -->
+            </div>
+        </section>
     </div>
 </body>
 </html>

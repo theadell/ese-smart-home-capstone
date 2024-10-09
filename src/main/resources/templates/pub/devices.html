@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Device Log: {deviceName}</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <script src="https://unpkg.com/htmx.org@2.0.3"></script>
 </head>
 <body>
-    <h1>Logs for Device: {deviceName}</h1>
-    <div id="device-log-results">
-        <ul>
-            {#each logs}
-                <li>{it}</li>
-            {/each}
-        </ul>
-        <div>
-            {#if page > 1}
-                <a hx-get="/logs/devices/{deviceName}?page={page - 1}" hx-target="#device-log-results" hx-swap="outerHTML">Previous</a>
-            {/if}
-            {#if hasNextPage}
-                <a hx-get="/logs/devices/{deviceName}?page={page + 1}" hx-target="#device-log-results" hx-swap="outerHTML">Next</a>
-            {/if}
-        </div>
+    <div class="container">
+        <h1 class="container__title">Logs for Device: {deviceName}</h1>
+        
+        <!-- Log Results Section -->
+        <section class="section log-results">
+            <div id="device-log-results">
+                <ul class="log-results__list">
+                    {#each logs}
+                        <li class="log-results__item">{it}</li>
+                    {/each}
+                </ul>
+                <div class="log-results__pagination">
+                    {#if page > 1}
+                        <a class="pagination__link pagination__link--prev" hx-get="/logs/devices/{deviceName}/page?page={page - 1}" hx-target="#device-log-results" hx-swap="outerHTML" hx-push-url="true">Previous</a>
+                    {/if}
+                    {#if hasNextPage}
+                        <a class="pagination__link pagination__link--next" hx-get="/logs/devices/{deviceName}/page?page={page + 1}" hx-target="#device-log-results" hx-swap="outerHTML" hx-push-url="true">Next</a>
+                    {/if}
+                </div>
+            </div>
+        </section>
     </div>
 </body>
 </html>

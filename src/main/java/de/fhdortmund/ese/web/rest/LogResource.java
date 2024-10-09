@@ -25,34 +25,33 @@ public class LogResource {
     @Location("pub/devices.html") 
     Template devices;
 
+    @Inject
+    @Location("pub/logpage.html") 
+    Template logsPage;
+
+    @Inject
+    @Location("pub/searchresult.html") 
+    Template searchResultsTemplate;
+
     @GET
     @Path("/search")
     @Produces(MediaType.TEXT_HTML)
-    public String searchLogs(@QueryParam("query") String query, @QueryParam("page") @DefaultValue("1") int page) {
+    public TemplateInstance searchLogs(@QueryParam("query") String query,
+                                       @QueryParam("page") @DefaultValue("1") int page) {
         int pageSize = 10;
         List<String> results = logService.searchLogs(query, page, pageSize);
         int totalResults = logService.getTotalResults(query);
-
-        StringBuilder resultHtml = new StringBuilder("<div id='log-results'><ul>");
-        for (String log : results) {
-            resultHtml.append("<li>").append(log).append("</li>");
-        }
-        resultHtml.append("</ul>");
-        
-        // Pagination Controls
-        if (page > 1) {
-            resultHtml.append("<a hx-get='/logs/search?query=").append(query).append("&page=").append(page - 1)
-                      .append("' hx-target='#log-results'>Previous</a>");
-        }
-        if (page * pageSize < totalResults) {
-            resultHtml.append("<a hx-get='/logs/search?query=").append(query).append("&page=").append(page + 1)
-                      .append("' hx-target='#log-results'>Next</a>");
-        }
-        resultHtml.append("</div>");
-        
-        return resultHtml.toString();
+        boolean hasNextPage = page * pageSize < totalResults;
+    
+        return searchResultsTemplate
+                .data("results", results)
+                .data("query", query)
+                .data("page", page)
+                .data("hasNextPage", hasNextPage)
+                .data("prevPage", page > 1 ? page - 1 : null)
+                .data("nextPage", hasNextPage ? page + 1 : null);
     }
-
+    
     @GET
     @Path("/devices/{deviceName}")
     @Produces(MediaType.TEXT_HTML)
@@ -62,13 +61,33 @@ public class LogResource {
         List<String> logs = logService.getDeviceLogsByName(deviceName, page, pageSize);
         int totalResults = logService.getTotalDeviceLogsCountByName(deviceName);
         boolean hasNextPage = page * pageSize < totalResults;
-
-        // Pass the data to the template
+    
+        // Prepare the data for the main page load
         return devices
                 .data("deviceName", deviceName)
                 .data("logs", logs)
                 .data("page", page)
                 .data("hasNextPage", hasNextPage);
     }
-
+    
+    @GET
+    @Path("/devices/{deviceName}/page")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getDeviceLogsByPage(@PathParam("deviceName") String deviceName,
+                                                @QueryParam("page") int page) {
+        int pageSize = 10;
+        List<String> logs = logService.getDeviceLogsByName(deviceName, page, pageSize);
+        int totalResults = logService.getTotalDeviceLogsCountByName(deviceName);
+        boolean hasNextPage = page * pageSize < totalResults;
+    
+        // Prepare the data only for pagination updates (log entries and pagination links)
+        return logsPage
+                .data("deviceName", deviceName)
+                .data("logs", logs)
+                .data("page", page)
+                .data("hasNextPage", hasNextPage)
+                .data("prevPage", page > 1 ? page - 1 : null)
+                .data("nextPage", hasNextPage ? page + 1 : null);
+    }
+        
 }

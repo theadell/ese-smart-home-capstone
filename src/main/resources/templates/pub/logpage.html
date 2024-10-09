@@ -1,0 +1,15 @@
+<div id="device-log-results">
+    <ul class="log-results__list">
+        {#each logs}
+            <li class="log-results__item">{it}</li>
+        {/each}
+    </ul>
+    <div class="log-results__pagination">
+        {#if prevPage}
+            <a class="pagination__link pagination__link--prev" hx-get="/logs/devices/{deviceName}/page?page={prevPage}" hx-target="#device-log-results" hx-swap="outerHTML" hx-push-url="true">Previous</a>
+        {/if}
+        {#if nextPage}
+            <a class="pagination__link pagination__link--next" hx-get="/logs/devices/{deviceName}/page?page={nextPage}" hx-target="#device-log-results" hx-swap="outerHTML" hx-push-url="true">Next</a>
+        {/if}
+    </div>
+</div>
