@@ -2,6 +2,7 @@ package de.fhdortmund.ese.lib.simulation.model.device;
 
 import org.slf4j.Logger;
 
+import de.fhdortmund.ese.lib.simulation.EnergyManager;
 import de.fhdortmund.ese.lib.simulation.model.clock.ClockObserver;
 
 public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
@@ -10,7 +11,7 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     protected DeviceState state;
 
     protected Logger logger;
-    
+
     public DeviceState getState() {
         return state;
     }
@@ -18,7 +19,7 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     public AbstractEnergyDevice(String name, double powerRating) {
         this.name = name;
         this.powerRating = powerRating;
-        this.state = DeviceState.ON_ACTIVE; 
+        this.state = DeviceState.ON_ACTIVE;
     }
 
     // Method to change the state of the device
@@ -31,7 +32,8 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     protected abstract void evaluateStatus(int currentTick);
 
     protected void consumeEnergy() {
-        double energyConsumed = powerRating / 3600; 
+        double energyConsumed = powerRating / 3600;
+        EnergyManager.getInstance().consumeEnergy(name, energyConsumed);
         logger.info("Device: {}, Rating: {} kW, Consumed: {} kWh", name, powerRating, energyConsumed);
     }
 
@@ -39,13 +41,14 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Thread.sleep(1000); 
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
             }
         }
     }
+
     @Override
     public void onTick(int currentTick) {
         evaluateStatus(currentTick);
@@ -55,7 +58,6 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
             logger.info("Device: {}, Status: Idle", name);
         }
     }
-
 
     public String getName() {
         return name;
@@ -69,4 +71,3 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
         return logger;
     }
 }
-
