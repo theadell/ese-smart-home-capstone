@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart House Simulation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Smart House Energy Simulation</h1>
+        
+        <!-- Start/Stop Simulation Controls -->
+        <div class="control-buttons">
+            <button class="btn-start" hx-post="/simulation/start" hx-target="#status" hx-swap="outerHTML">Start Simulation</button>
+            <button class="btn-stop" hx-post="/simulation/stop" hx-target="#status" hx-swap="outerHTML">Stop Simulation</button>
+        </div>
+        
+        <!-- Status Display -->
+        <div id="status" hx-get="/simulation/status" hx-trigger="load, every 5s" hx-swap="outerHTML"></div>
+
+        <!-- Energy Level -->
+        <h2>Energy Level</h2>
+        <div class="energy-level" hx-get="/simulation/energy" hx-trigger="load, every 2s" hx-swap="innerHTML">
+            <p>Current Energy: <span id="energy-value">Loading...</span> kWh</p>
+        </div>
+
+        <!-- Devices Section -->
+        <h2>Devices</h2>
+        <div id="devices" hx-get="/simulation/devices" hx-trigger="load">
+            <!-- Device list will load here -->
+        </div>
+
+        <!-- Energy Sources Section -->
+        <h2>Energy Sources</h2>
+        <div id="sources" hx-get="/simulation/sources" hx-trigger="load">
+            <!-- Source list will load here -->
+        </div>
+
+        <!-- Log Search Section -->
+        <h2>Search Logs</h2>
+        <form hx-get="/logs/search" hx-target="#log-results">
+            <input type="text" name="query" placeholder="Enter search term" class="input-field"/>
+            <button type="submit" class="btn-search">Search</button>
+        </form>
+        <div id="log-results">
+            <!-- Log search results will load here -->
+        </div>
+    </div>
+</body>
+</html>

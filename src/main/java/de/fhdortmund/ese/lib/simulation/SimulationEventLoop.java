@@ -3,7 +3,7 @@ package de.fhdortmund.ese.lib.simulation;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhdortmund.ese.lib.simulation.model.source.EnergySource;
+import de.fhdortmund.ese.lib.simulation.model.source.AbstractEnergySource;
 import de.fhdortmund.ese.lib.simulation.model.source.SolarPanel;
 import de.fhdortmund.ese.lib.simulation.model.source.WindTurbine;
 import de.fhdortmund.ese.lib.simulation.model.clock.SimulationClock;
@@ -16,7 +16,7 @@ import jakarta.inject.Singleton;
 @Singleton
 public class SimulationEventLoop {
     private List<AbstractEnergyDevice> devices;
-    private List<EnergySource> energySources;
+    private List<AbstractEnergySource> energySources;
 
     private List<Thread> deviceThreads;
     private List<Thread> sourceThreads;
@@ -26,7 +26,7 @@ public class SimulationEventLoop {
     public SimulationEventLoop() {
 
         // init simulation devices and sources 
-        
+
         devices = new ArrayList<>();
         energySources = new ArrayList<>();
         deviceThreads = new ArrayList<>();
@@ -86,11 +86,11 @@ public class SimulationEventLoop {
         return isRunning;
     }
 
-    public List<EnergySource> getEnergySources() {
+    public List<AbstractEnergySource> getEnergySources() {
         return energySources;
     }
 
-    public void setEnergySources(List<EnergySource> energySources) {
+    public void setEnergySources(List<AbstractEnergySource> energySources) {
         this.energySources = energySources;
     }
 
