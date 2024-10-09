@@ -17,8 +17,9 @@ public class SimulationResource {
     private SimulationEventLoop eventLoop;
 
     @GET
+    @Path("/status")
     @Produces(MediaType.APPLICATION_JSON)
-    public SimulationState hello() {
+    public SimulationState getStatus() {
         return new SimulationState(eventLoop.isRunning(), EnergyManager.getInstance().getTotalEnergyAvailable());
     }
 

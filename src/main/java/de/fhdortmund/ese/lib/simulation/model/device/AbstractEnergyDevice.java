@@ -1,10 +1,9 @@
 package de.fhdortmund.ese.lib.simulation.model.device;
 
-import org.slf4j.Logger;
+import org.jboss.logging.Logger;
 
 import de.fhdortmund.ese.lib.simulation.EnergyManager;
 import de.fhdortmund.ese.lib.simulation.model.clock.ClockObserver;
-
 public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     protected String name;
     protected double powerRating; // Power in kW
@@ -20,12 +19,13 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
         this.name = name;
         this.powerRating = powerRating;
         this.state = DeviceState.ON_ACTIVE;
+        this.logger = Logger.getLogger("DeviceLogger");
     }
 
     // Method to change the state of the device
     public void setState(DeviceState newState) {
         this.state = newState;
-        logger.info("Device: {}, New State: {}", name, newState);
+        logger.infof("Device: %s, New State: %s", name, newState);
     }
 
     // Determine if device should consume energy at currentTick
@@ -34,7 +34,7 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     protected void consumeEnergy() {
         double energyConsumed = powerRating / 3600;
         EnergyManager.getInstance().consumeEnergy(name, energyConsumed);
-        logger.info("Device: {}, Rating: {} kW, Consumed: {} kWh", name, powerRating, energyConsumed);
+        logger.infof("Device: %s, Rating: %s kW, Consumed: %s kWh", name, powerRating, energyConsumed);
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
         if (state == DeviceState.ON_ACTIVE) {
             consumeEnergy();
         } else if (state == DeviceState.ON_IDLE) {
-            logger.info("Device: {}, Status: Idle", name);
+            logger.infof("Device: %s, Status: Idle", name);
         }
     }
 
@@ -70,4 +70,5 @@ public abstract class AbstractEnergyDevice implements ClockObserver, Runnable {
     public Logger getLogger() {
         return logger;
     }
+
 }

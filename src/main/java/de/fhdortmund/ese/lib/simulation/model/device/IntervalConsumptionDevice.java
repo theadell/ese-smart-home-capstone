@@ -34,12 +34,12 @@ public class IntervalConsumptionDevice extends AbstractEnergyDevice {
         if (state == DeviceState.ON_IDLE && currentIntervalTime >= intervalInSeconds) {
             state = DeviceState.ON_ACTIVE;
             currentIntervalTime = 0; // Reset interval timer
-            logger.info("Device: {}, Status: TURNED ACTIVE", name);
+            logger.infof("Device: %s, Status: TURNED ACTIVE", name);
         }
         else if (state == DeviceState.ON_ACTIVE && currentIntervalTime >= activeDurationInSeconds) {
             state = DeviceState.ON_IDLE;
             currentIntervalTime = 0; // Reset interval timer
-            logger.info("Device: {}, Status: TURNED IDLE", name);
+            logger.infof("Device: %s, Status: TURNED IDLE", name);
         }
     }
 }

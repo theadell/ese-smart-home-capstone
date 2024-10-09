@@ -1,6 +1,6 @@
 package de.fhdortmund.ese.lib.simulation.model.device;
 
-
+import de.fhdortmund.ese.lib.simulation.EnergyManager;
 
 /**
  * SawtoothConsumptionDevice is a device that operates on a sawtooth power consumption pattern.
@@ -54,11 +54,11 @@ public class SawtoothConsumptionDevice extends AbstractEnergyDevice {
                 currentPowerConsumption = 0.0;
                 currentTickInCycle = 0;  // Reset cycle counter
                 rampingUp = false; // Switch to idle mode
-                logger.info("Device: {}, Status: REACHED PEAK AND RESET TO IDLE", name);
+                logger.infof("Device: %s, Status: REACHED PEAK AND RESET TO IDLE", name);
             } else {
                 // Device is actively ramping up
                 state = DeviceState.ON_ACTIVE;
-                logger.info("Device: {}, Status: RAMPING UP, Current Power Consumption: {} kW", name, currentPowerConsumption);
+                logger.infof("Device: %s, Status: RAMPING UP, Current Power Consumption: %s kW", name, currentPowerConsumption);
             }
         } else {
             // Idle phase: Remain at zero power for the configured idle duration
@@ -67,17 +67,17 @@ public class SawtoothConsumptionDevice extends AbstractEnergyDevice {
                 state = DeviceState.ON_ACTIVE;
                 currentTickInCycle = 0;  // Reset cycle counter
                 rampingUp = true; // Start ramping up again
-                logger.info("Device: {}, Status: STARTING RAMP-UP", name);
+                logger.infof("Device: %s, Status: STARTING RAMP-UP", name);
             } else {
-                logger.info("Device: {}, Status: IDLE", name);
+                logger.infof("Device: %s, Status: IDLE", name);
             }
         }
     }
 
     @Override
     protected void consumeEnergy() {
-        double energyConsumed = currentPowerConsumption / 3600; // kWh consumed in one tick
-        // EnergyManager.getInstance().consumeEnergy(name, energyConsumed);
-        logger.info("Device: {}, Rating: {} kW, Consumed: {} kWh", name, currentPowerConsumption, energyConsumed);
+        double energyConsumed = currentPowerConsumption / 3600; 
+        EnergyManager.getInstance().consumeEnergy(name, energyConsumed);
+        logger.infof("Device: %s, Rating: %s kW, Consumed: %s kWh", name, currentPowerConsumption, energyConsumed);
     }
 }

@@ -1,7 +1,6 @@
 package de.fhdortmund.ese.lib.simulation.model.source;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 import de.fhdortmund.ese.lib.simulation.EnergyManager;
 
@@ -13,7 +12,7 @@ public abstract class AbstractEnergySource implements EnergySource, Runnable {
     public AbstractEnergySource(String name, double energyPerTick) {
         this.name = name;
         this.energyPerTick = energyPerTick;
-        this.logger = LoggerFactory.getLogger(name);
+        this.logger = Logger.getLogger("EnergySourceLogger");
     }
 
     @Override
@@ -36,7 +35,7 @@ public abstract class AbstractEnergySource implements EnergySource, Runnable {
     @Override
     public void produceEnergy() {
         EnergyManager.getInstance().addEnergy(name, energyPerTick);
-        logger.info("EnergySource: {}, Produced: {} kWh", name, energyPerTick);
+        logger.infof("EnergySource: %s, Produced: %s kWh", name, energyPerTick);
     }
 
 
@@ -51,5 +50,7 @@ public abstract class AbstractEnergySource implements EnergySource, Runnable {
     public Logger getLogger() {
         return logger;
     }
+
+
 
 }
