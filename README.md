@@ -68,4 +68,4 @@ The project is organized into two main directories: `src/lib/simulation` for sim
 
 ### Class Diagram
 
-![Class Hierarchy](Class-diagram.png)
+![Class Hierarchy](class-diagram.png)
