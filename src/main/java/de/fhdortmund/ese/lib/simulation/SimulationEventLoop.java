@@ -18,9 +18,9 @@ public class SimulationEventLoop {
     private List<AbstractEnergyDevice> devices;
     private List<AbstractEnergySource> energySources;
 
-    private List<Thread> deviceThreads;
-    private List<Thread> sourceThreads;
-    private SimulationClock clock;
+    private final List<Thread> deviceThreads;
+    private final List<Thread> sourceThreads;
+    private final SimulationClock clock;
     private boolean isRunning = false;
 
     public SimulationEventLoop() {

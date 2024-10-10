@@ -30,6 +30,6 @@
 - Click "Start Simulation" to run the simulation
 - to view log file for device or source click " View log file for ..." which redirects you to the spefic log file i.e "http://localhost:8080/logs/devices/Refrigerator-001"
 
-
-
+### Class Diagram 
+![Class Heighrachy](Class-hierarchy.png)
 

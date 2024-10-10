@@ -18,7 +18,7 @@ public class LogService {
         try (Stream<String> lines = Files.lines(Paths.get(logDirectory, "app.log"))) {
             Pattern pattern = Pattern.compile(query);
             return lines.filter(line -> pattern.matcher(line).find())
-                        .skip((page - 1) * pageSize)
+                        .skip((long) (page - 1) * pageSize)
                         .limit(pageSize)
                         .collect(Collectors.toList());
         } catch (IOException e) {
@@ -55,7 +55,7 @@ public class LogService {
     
         private List<String> getLogsFromFile(String fileName, int page, int pageSize) {
             try (Stream<String> lines = Files.lines(Paths.get(logDirectory, fileName))) {
-                return lines.skip((page - 1) * pageSize)
+                return lines.skip((long) (page - 1) * pageSize)
                             .limit(pageSize)
                             .collect(Collectors.toList());
             } catch (IOException e) {
@@ -76,7 +76,7 @@ public class LogService {
         public List<String> getDeviceLogsByName(String deviceName, int page, int pageSize) {
             try (Stream<String> lines = Files.lines(Paths.get(logDirectory, "devices.log"))) {
                 return lines.filter(line -> line.contains(deviceName))
-                            .skip((page - 1) * pageSize)
+                            .skip((long) (page - 1) * pageSize)
                             .limit(pageSize)
                             .collect(Collectors.toList());
             } catch (IOException e) {

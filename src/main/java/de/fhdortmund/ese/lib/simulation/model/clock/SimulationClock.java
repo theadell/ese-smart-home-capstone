@@ -8,7 +8,7 @@ public class SimulationClock extends Thread {
     private static SimulationClock instance;
     private final Set<ClockObserver> observers = new HashSet<>();
     private boolean running = false;
-    private AtomicInteger currentTick = new AtomicInteger(0);
+    private final AtomicInteger currentTick = new AtomicInteger(0);
 
 
     private SimulationClock() {}

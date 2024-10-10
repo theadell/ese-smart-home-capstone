@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class EnergyManager {
     private static EnergyManager instance;
     private double totalEnergyAvailable;
-    private Logger logger;
+    private final Logger logger;
 
     private EnergyManager(double initialEnergy) {
         this.totalEnergyAvailable = initialEnergy;
