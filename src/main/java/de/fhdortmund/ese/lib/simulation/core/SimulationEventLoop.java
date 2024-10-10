@@ -2,6 +2,7 @@ package de.fhdortmund.ese.lib.simulation.core;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import de.fhdortmund.ese.lib.simulation.entity.EnergyDevice;
@@ -18,38 +19,43 @@ public class SimulationEventLoop {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     private SimulationState state = SimulationState.STOPPED;
 
+    private ScheduledFuture<?> deviceTask;
+    private ScheduledFuture<?> sourceTask;
+
+
     public SimulationEventLoop(EventBus bus ,List<EnergyDevice> devices, List<EnergySource> sources, Energy initialEnergy) {
         this.devices = devices;
         this.sources = sources;
         this.balancer = new EnergyBalancer(initialEnergy);
         this.eventBus = bus;
         eventBus.subscribe(balancer);
-    }
 
-    public void startSimulation() {
-        if (state == SimulationState.RUNNING) return;
-
-        state = SimulationState.RUNNING;
-
-        // Schedule devices to tick every second
-        executorService.scheduleAtFixedRate(() -> {
+        deviceTask = executorService.scheduleAtFixedRate(() -> {
             if (state == SimulationState.RUNNING) {
                 devices.forEach(EnergyDevice::onTick);
             }
         }, 0, 1, TimeUnit.SECONDS);
 
-        // Schedule sources to tick every second
-        executorService.scheduleAtFixedRate(() -> {
+        sourceTask = executorService.scheduleAtFixedRate(() -> {
             if (state == SimulationState.RUNNING) {
                 sources.forEach(EnergySource::onTick);
             }
         }, 0, 1, TimeUnit.SECONDS);
+
     }
 
-    public void stopSimulation() {
-        state = SimulationState.STOPPED;
-        executorService.shutdownNow();
+    public void runSimulation() {
+        if (state == SimulationState.RUNNING) return;
+
+        state = SimulationState.RUNNING;
     }
+
+    public void pauseSimulation() {
+        if (state == SimulationState.STOPPED) return;
+
+        state = SimulationState.STOPPED;
+    }
+
 
     public boolean isRunning() {
         return state == SimulationState.RUNNING;
@@ -66,5 +72,20 @@ public class SimulationEventLoop {
     public double getCurrentEnergyLevel() {
         return balancer.getTotalEnergy().toKilowattHours();
     }
+    public void cleanup() {
+        pauseSimulation();
+        
+        // Shut down the executor service to free resources
+        executorService.shutdown();
+        try {
+            // Wait for existing tasks to terminate
+            if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                executorService.shutdownNow(); // Force shutdown if not terminated
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow(); // Force shutdown on interruption
+        }
+    }
+
 
 }

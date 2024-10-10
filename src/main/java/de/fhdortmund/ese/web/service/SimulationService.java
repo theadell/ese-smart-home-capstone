@@ -50,11 +50,11 @@ public class SimulationService {
     }
 
     public void startSimulation() {
-        simulationEventLoop.startSimulation();
+        simulationEventLoop.runSimulation();
     }
 
     public void stopSimulation() {
-        simulationEventLoop.stopSimulation();
+        simulationEventLoop.pauseSimulation();
     }
 
     public boolean isRunning() {
@@ -75,6 +75,6 @@ public class SimulationService {
 
     @PreDestroy
     public void cleanup() {
-        stopSimulation();
+        simulationEventLoop.cleanup();
     }
 }
