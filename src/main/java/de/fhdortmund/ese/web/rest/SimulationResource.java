@@ -2,10 +2,9 @@ package de.fhdortmund.ese.web.rest;
 
 import java.util.List;
 
-import de.fhdortmund.ese.lib.simulation.EnergyManager;
-import de.fhdortmund.ese.lib.simulation.SimulationEventLoop;
-import de.fhdortmund.ese.lib.simulation.model.device.AbstractEnergyDevice;
-import de.fhdortmund.ese.lib.simulation.model.source.AbstractEnergySource;
+import de.fhdortmund.ese.lib.simulation.entity.EnergyDevice;
+import de.fhdortmund.ese.lib.simulation.entity.EnergySource;
+import de.fhdortmund.ese.web.service.SimulationService;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
@@ -20,7 +19,7 @@ import jakarta.ws.rs.core.MediaType;
 public class SimulationResource {
 
     @Inject
-    private SimulationEventLoop eventLoop;
+    private SimulationService simulationService;
 
     @Inject
     @Location("pub/devicelist.html")
@@ -34,7 +33,7 @@ public class SimulationResource {
     @Path("/status")
     @Produces(MediaType.TEXT_HTML)
     public String getStatus() {
-        return eventLoop.isRunning() ? "<div id='status'>Simulation is running</div>"
+        return simulationService.isRunning() ? "<div id='status'>Simulation is running</div>"
                 : "<div id='status'>Simulation is stopped</div>";
     }
 
@@ -42,7 +41,7 @@ public class SimulationResource {
     @Path("/start")
     @Produces(MediaType.TEXT_HTML)
     public String startSimulation() {
-        eventLoop.startSimulation();
+        simulationService.startSimulation();
         return "<div id='status'>Simulation started</div>";
     }
 
@@ -50,7 +49,7 @@ public class SimulationResource {
     @Path("/stop")
     @Produces(MediaType.TEXT_HTML)
     public String stopSimulation() {
-        eventLoop.stopSimulation();
+        simulationService.stopSimulation();
         return "<div id='status'>Simulation stopped</div>";
     }
 
@@ -58,7 +57,7 @@ public class SimulationResource {
     @Path("/devices")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getDevices() {
-        List<AbstractEnergyDevice> devices = eventLoop.getDevices();
+        List<EnergyDevice> devices = simulationService.getDevices();
 
         return deviceListTemplate.data("devices", devices);
     }
@@ -67,7 +66,7 @@ public class SimulationResource {
     @Path("/sources")
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getSources() {
-        List<AbstractEnergySource> sources = eventLoop.getEnergySources();
+        List<EnergySource> sources = simulationService.getSources();
 
         return sourceListTemplate.data("sources", sources);
     }
@@ -76,7 +75,7 @@ public class SimulationResource {
     @Path("/energy")
     @Produces(MediaType.TEXT_PLAIN)
     public String getEnergyLevel() {
-        double energy = EnergyManager.getInstance().getTotalEnergyAvailable();
+        double energy = simulationService.getCurrentEnergyLevel();
         return String.format("%.2f", energy);
     }
 

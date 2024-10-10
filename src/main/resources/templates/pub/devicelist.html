@@ -4,9 +4,9 @@
             <li class="devices__item">
                 <strong>{it.getName()}</strong> 
                 <br>
-                Power Rating: {it.getPowerRating()} kW
+                Power Rating: {it.getPower()} 
                 <br>
-                <a href="/logs/devices/{it.getName()}" class="devices__link">View log file for device {it.getName()}</a>
+                <a href="/logs/devices/{it.getName()}" class="devices__link">View device logs</a>
             </li>
         {/each}
     </ul>

@@ -1,4 +1,4 @@
-package de.fhdortmund.ese.lib.utils;
+package de.fhdortmund.ese.lib.simulation.logging;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Filter;

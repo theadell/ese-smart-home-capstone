@@ -10,7 +10,6 @@
     <div class="container">
         <h1 class="container__title">Smart House Energy Simulation</h1>
 
-        <!-- Start/Stop Simulation Controls -->
         <section class="section control">
             <h2 class="section__title">Simulation Controls</h2>
             <div class="control__buttons">
@@ -20,7 +19,6 @@
             <div id="status" class="status" hx-get="/simulation/status" hx-trigger="load, every 5s" hx-swap="outerHTML"></div>
         </section>
 
-        <!-- Energy Level -->
         <section class="section energy-level">
             <h2 class="section__title">Energy Level</h2>
             <div class="energy-level__content" hx-get="/simulation/energy" hx-trigger="load, every 2s" hx-swap="innerHTML">
@@ -28,23 +26,18 @@
             </div>
         </section>
 
-        <!-- Devices Section -->
         <section class="section devices">
             <h2 class="section__title">Devices</h2>
             <div id="devices" hx-get="/simulation/devices" hx-trigger="load">
-                <!-- Device list will load here -->
             </div>
         </section>
 
-        <!-- Energy Sources Section -->
         <section class="section sources">
             <h2 class="section__title">Energy Sources</h2>
             <div id="sources"  hx-get="/simulation/sources" hx-trigger="load">
-                <!-- Source list will load here -->
             </div>
         </section>
 
-        <!-- Log Search Section -->
         <section class="section log-search">
             <h2 class="section__title">Search Logs</h2>
             <form class="log-search__form" hx-get="/logs/search" hx-target="#log-results">
@@ -52,7 +45,6 @@
                 <button type="submit" class="btn btn--search">Search</button>
             </form>
             <div id="log-results" class="log-search__results">
-                <!-- Log search results will load here -->
             </div>
         </section>
     </div>
